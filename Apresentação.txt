@@ -1,0 +1,17 @@
+Sistema IoT de Auditoria Wi-Fi com ESP32
+
+Funcionalidades:
+- Escaneia redes wi-fi próximas
+- Analisa segurança das redes wi-fi
+- Analisa congestionamento dos canais wi-fi
+- Cria portal captivo
+- Fornece dashboard web
+- Registra logs no Firebase
+- Usa horário real via internet
+- Possui autenticação local
+- Fornece APIs JSON
+
+Como ele funciona?
+1. 
+
+2. 
