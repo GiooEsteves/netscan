@@ -5,8 +5,8 @@
 
 struct NetworkInfo {
   String ssid;
-  int rssi;
   String bssid;
+  int rssi;
   int channel;
   String encryption;
   String detectedAt;
@@ -15,6 +15,18 @@ struct NetworkInfo {
 struct LocalUser {
   String username;
   String password;
+};
+
+struct Alert {
+  String type;
+  String message;
+  String level;
+};
+
+struct WiFiQuality {
+  int score;
+  String level;
+  String description;
 };
 
 #endif

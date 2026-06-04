@@ -32,31 +32,38 @@ netscan-iot/
 │
 ├── src/
 │   ├── main.cpp
-│   ├── WifiScanner.cpp
-│   ├── CaptivePortal.cpp
-│   ├── ChannelAnalysis.cpp
-│   └── TimeManager.cpp
-│
-├── include/
-│   ├── WifiScanner.h
-│   ├── CaptivePortal.h
-│   ├── ChannelAnalysis.h
 │   ├── Models.h
-│   ├── Config.h
-│   └── TimeManager.h
+│   └── Config.h
+|   
+|   ├── analysis/
+|       ├── ChannelAnalysis.cpp
+|       ├── ChannelAnalysis.h
+|       ├── SecurityAnalysis.cpp
+|       └── SecurityAnalysis.h
+|
+|   ├── api/
+|       ├── ApiRoutes.cpp
+|       └── ApiRoutes.h
+|
+|   ├── firebase/
+|       ├── FirebaseManager.cpp
+|       └── FirebaseManager.h
+|
+|   ├── portal/
+│       ├── CaptivePortal.cpp
+|       └── CaptivePortal.h
+|
+|   ├── scanner/
+│       ├── WifiScanner.cpp
+│       └── WifiScanner.h
+|
+|   ├── time/
+│       ├── TimeManager.cpp
+│       └── TimeManager.h
 │
 ├── platformio.ini
-│
-├── docs/
-│   ├── imagens/
-│   ├── diagramas/
-│   └── relatorio.pdf
 │
 └── README.md
 ```
 
-<<<<<<< HEAD
 ## Como Funciona?
-=======
-## Como Funciona?
->>>>>>> 76a5290339d72579371bd33bf7bec272abb45b2a
