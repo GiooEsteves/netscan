@@ -488,6 +488,12 @@ th {
   </div>
 
   <div class="actions">
+    <a class="button" href="/api/networks">Redes</a>
+    <a class="button" href="/api/channels">Canais</a>
+    <a class="button" href="/api/stats">Estatísticas</a>
+    <a class="button" href="/api/alerts">Alertas de Segurança</a>
+    <a class="button" href="/api/quality">Teste de Qualidade</a>
+    <a class="button" href="/api/evil-twin">Evil Twin</a>
     <a class="button" href="/api/report/csv">Exportar CSV</a>
   </div>
 
