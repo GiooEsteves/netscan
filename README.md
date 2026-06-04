@@ -55,4 +55,8 @@ netscan-iot/
 └── README.md
 ```
 
+<<<<<<< HEAD
 ## Como Funciona?
+=======
+## Como Funciona?
+>>>>>>> 76a5290339d72579371bd33bf7bec272abb45b2a
