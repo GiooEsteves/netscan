@@ -1,6 +1,6 @@
-#include "FirebaseManager.h"
+#include "../firebase/FirebaseManager.h"
 #include "Config.h"
-#include "TimeManager.h"
+#include "../time/TimeManager.h"
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
@@ -46,6 +46,11 @@ void sendNetworkToFirebase(NetworkInfo network) {
 }
 
 void sendAuditLogToFirebase(String action, String detail) {
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("Firebase ignorado: WiFi externo nao conectado.");
+    return;
+  }
+  
   StaticJsonDocument<256> doc;
 
   doc["action"] = action;

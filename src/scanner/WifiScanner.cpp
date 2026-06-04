@@ -1,6 +1,6 @@
-#include "WifiScanner.h"
-#include "TimeManager.h"
-#include "FirebaseManager.h"
+#include "../scanner/WifiScanner.h"
+#include "../time/TimeManager.h"
+#include "../firebase/FirebaseManager.h"
 #include <WiFi.h>
 
 NetworkInfo networks[50];

@@ -1,9 +1,9 @@
-#include "CaptivePortal.h"
+#include "../portal/CaptivePortal.h"
 #include "Config.h"
 #include "Models.h"
-#include "WifiScanner.h"
-#include "ChannelAnalysis.h"
-#include "FirebaseManager.h"
+#include "../scanner/WifiScanner.h"
+#include "../analysis/ChannelAnalysis.h"
+#include "../firebase/FirebaseManager.h"
 #include <WiFi.h>
 #include <WebServer.h>
 #include <DNSServer.h>
@@ -28,9 +28,10 @@ void handleDashboard();
 void handleApiNetworks();
 void handleApiChannels();
 void handleNotFound();
+void handleNoContent();
 
 void startCaptivePortal() {
-  WiFi.mode(WIFI_AP);
+  WiFi.mode(WIFI_AP_STA);
   WiFi.softAP(PORTAL_SSID, PORTAL_PASSWORD);
 
   delay(500);
@@ -45,10 +46,21 @@ void startCaptivePortal() {
   server.on("/api/networks", HTTP_GET, handleApiNetworks);
   server.on("/api/channels", HTTP_GET, handleApiChannels);
 
+  // Android
   server.on("/generate_204", HTTP_GET, handleRoot);
   server.on("/gen_204", HTTP_GET, handleRoot);
+
+  // Windows
   server.on("/fwlink", HTTP_GET, handleRoot);
+  server.on("/connecttest.txt", HTTP_GET, handleRoot);
+  server.on("/ncsi.txt", HTTP_GET, handleRoot);
+
+  // iOS/macOS
   server.on("/hotspot-detect.html", HTTP_GET, handleRoot);
+  server.on("/library/test/success.html", HTTP_GET, handleRoot);
+
+  // Navegadores
+  server.on("/favicon.ico", HTTP_GET, handleNoContent);
 
   server.onNotFound(handleNotFound);
 
@@ -73,32 +85,59 @@ void handleRoot() {
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Portal Educacional</title>
+<title>Portal de Auditoria</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{font-family:Arial;background:#1e3c72;padding:20px;}
-.card{max-width:420px;margin:60px auto;background:white;padding:25px;border-radius:14px;}
-input,button{width:100%;padding:12px;margin-top:10px;box-sizing:border-box;}
-button{background:#1e3c72;color:white;border:0;border-radius:8px;}
-.info{background:#f2f2f2;padding:10px;margin-top:20px;font-size:13px;}
+body{
+  font-family:Arial;
+  background:#1e3c72;
+  padding:20px;
+}
+.card{
+  max-width:420px;
+  margin:60px auto;
+  background:white;
+  padding:25px;
+  border-radius:14px;
+}
+input,button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  box-sizing:border-box;
+}
+button{
+  background:#1e3c72;
+  color:white;
+  border:0;
+  border-radius:8px;
+}
+.info{
+  background:#f2f2f2;
+  padding:10px;
+  margin-top:20px;
+  font-size:13px;
+}
 </style>
 </head>
 <body>
 <div class="card">
-<h2>Portal Educacional UPE</h2>
-<p>Auditoria Wi-Fi defensiva.</p>
+<h2>Portal Auditoria - Educacional UPE</h2>
+<p>Auditoria de Wi-Fi.</p>
+
 <form method="POST" action="/login">
-<input name="username" placeholder="Usuario local" required>
-<input name="password" type="password" placeholder="Senha local" required>
-<button>Entrar</button>
+<input name="username" placeholder="Usuario" required>
+<input name="password" type="password" placeholder="Senha" required>
+<button type="submit">Entrar</button>
 </form>
+
 <div class="info">
 <b>Usuarios de teste:</b><br>
 admin / 123456<br>
 professor / upe2026<br>
-aluno / wifi123<br><br>
-Nenhuma senha real e armazenada.
+aluno / wifi123
 </div>
+
 </div>
 </body>
 </html>
@@ -122,31 +161,60 @@ void handleLogin() {
 
   if (valid) {
     authenticated = true;
+
     sendAuditLogToFirebase("login_local_ok", username);
-    server.sendHeader("Location", "/dashboard");
-    server.send(302, "text/plain", "OK");
+
+    server.sendHeader("Location", "/dashboard", true);
+    server.send(302, "text/plain", "Redirecionando para dashboard...");
   } else {
+    authenticated = false;
+
     sendAuditLogToFirebase("login_local_negado", "usuario_invalido");
-    server.send(401, "text/html", "<h2>Login invalido</h2><a href='/'>Voltar</a>");
+
+    server.send(401, "text/html",
+      "<!DOCTYPE html>"
+      "<html><head><meta charset='UTF-8'>"
+      "<meta name='viewport' content='width=device-width, initial-scale=1'>"
+      "<title>Login invalido</title></head>"
+      "<body style='font-family:Arial;text-align:center;padding:40px;'>"
+      "<h2>Login invalido</h2>"
+      "<p>Usuario ou senha incorretos.</p>"
+      "<a href='/'>Voltar</a>"
+      "</body></html>"
+    );
   }
 }
 
 void handleDashboard() {
   if (!authenticated) {
-    server.sendHeader("Location", "/");
+    server.sendHeader("Location", "/", true);
     server.send(302, "text/plain", "Login necessario");
     return;
   }
 
-  String html = "<html><head><meta charset='UTF-8'><title>Dashboard</title>";
-  html += "<style>body{font-family:Arial;padding:20px;}table{width:100%;border-collapse:collapse;}td,th{border:1px solid #ddd;padding:8px;}th{background:#1e3c72;color:white;}</style>";
+  String html = "<!DOCTYPE html>";
+  html += "<html><head><meta charset='UTF-8'>";
+  html += "<meta name='viewport' content='width=device-width, initial-scale=1'>";
+  html += "<title>Dashboard</title>";
+  html += "<style>";
+  html += "body{font-family:Arial;padding:20px;background:#f5f7fb;}";
+  html += ".card{background:white;padding:20px;border-radius:12px;margin-bottom:20px;}";
+  html += "table{width:100%;border-collapse:collapse;background:white;}";
+  html += "td,th{border:1px solid #ddd;padding:8px;text-align:left;}";
+  html += "th{background:#1e3c72;color:white;}";
+  html += "a{color:#1e3c72;font-weight:bold;}";
+  html += "</style>";
   html += "</head><body>";
+
+  html += "<div class='card'>";
   html += "<h1>Painel de Auditoria Wi-Fi</h1>";
   html += "<p>Redes detectadas: " + String(networkCount) + "</p>";
   html += "<p>Canal sugerido: " + String(getBestChannel()) + "</p>";
   html += "<p><a href='/api/networks'>API Redes</a> | <a href='/api/channels'>API Canais</a></p>";
+  html += "</div>";
 
-  html += "<table><tr><th>SSID</th><th>RSSI</th><th>Canal</th><th>Seguranca</th><th>Hora</th></tr>";
+  html += "<table>";
+  html += "<tr><th>SSID</th><th>RSSI</th><th>Canal</th><th>Seguranca</th><th>Hora</th></tr>";
 
   for (int i = 0; i < networkCount; i++) {
     html += "<tr>";
@@ -158,7 +226,8 @@ void handleDashboard() {
     html += "</tr>";
   }
 
-  html += "</table></body></html>";
+  html += "</table>";
+  html += "</body></html>";
 
   server.send(200, "text/html", html);
 }
@@ -185,7 +254,6 @@ void handleApiNetworks() {
 
 void handleApiChannels() {
   StaticJsonDocument<2048> doc;
-
   JsonArray arr = doc.createNestedArray("channels");
 
   for (int i = 1; i <= 13; i++) {
@@ -202,7 +270,33 @@ void handleApiChannels() {
   server.send(200, "application/json", json);
 }
 
+void handleNoContent() {
+  server.send(204, "text/plain", "");
+}
+
 void handleNotFound() {
-  server.sendHeader("Location", "http://" + WiFi.softAPIP().toString() + "/");
+  String uri = server.uri();
+
+  Serial.println("Rota nao encontrada: " + uri);
+
+  if (
+    uri == "/generate_204" ||
+    uri == "/gen_204" ||
+    uri == "/hotspot-detect.html" ||
+    uri == "/connecttest.txt" ||
+    uri == "/ncsi.txt" ||
+    uri == "/fwlink" ||
+    uri == "/library/test/success.html"
+  ) {
+    handleRoot();
+    return;
+  }
+
+  if (uri == "/favicon.ico") {
+    server.send(204, "text/plain", "");
+    return;
+  }
+
+  server.sendHeader("Location", "/", true);
   server.send(302, "text/plain", "Redirecionando...");
 }

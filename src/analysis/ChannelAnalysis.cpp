@@ -1,6 +1,7 @@
-#include "ChannelAnalysis.h"
-#include "WifiScanner.h"
-#include "FirebaseManager.h"
+
+#include "../analysis/ChannelAnalysis.h"
+#include "../scanner/WifiScanner.h"
+#include "../firebase/FirebaseManager.h"
 #include <Arduino.h>
 
 int getBestChannel() {

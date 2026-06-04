@@ -1,6 +1,7 @@
-#include "TimeManager.h"
+#include "../time/TimeManager.h"
 
 #include <WiFiUdp.h>
+#include <WiFi.h>
 #include <NTPClient.h>
 
 WiFiUDP ntpUDP;
@@ -18,6 +19,8 @@ void setupTimeManager() {
 }
 
 String getCurrentDateTime() {
-    timeClient.update();
+    if (WiFi.status() == WL_CONNECTED) {
+        timeClient.update();
+    }
     return timeClient.getFormattedTime();
 }

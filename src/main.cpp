@@ -2,11 +2,11 @@
 #include <WiFi.h>
 
 #include "Config.h"
-#include "WifiScanner.h"
-#include "ChannelAnalysis.h"
-#include "TimeManager.h"
-#include "CaptivePortal.h"
-#include "FirebaseManager.h"
+#include "time/TimeManager.h"
+#include "portal/CaptivePortal.h"
+#include "analysis/ChannelAnalysis.h"
+#include "scanner/WifiScanner.h"
+#include "firebase/FirebaseManager.h"
 
 enum Mode {
   MODE_SCANNER,
@@ -28,7 +28,6 @@ void setup() {
 
   Serial.println();
   Serial.println("=== ESP32 AUDITORIA WIFI EDUCACIONAL ===");
-  Serial.println("Portal defensivo sem captura de credenciais reais.");
   Serial.println();
 
   connectToInternet();
@@ -110,7 +109,7 @@ void connectToInternet() {
 void printMenu() {  
   Serial.println("Comandos:");
   Serial.println("1 - Scanner WiFi");
-  Serial.println("2 - Portal Captivo Defensivo");
+  Serial.println("2 - Portal Auditoria");
   Serial.println("3 - Mostrar redes encontradas");
   Serial.println("4 - Analise de canais");
   Serial.println("5 - Reconectar WiFi externo");
