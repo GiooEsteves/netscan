@@ -35,30 +35,30 @@ netscan-iot/
 │   ├── main.cpp
 │   ├── Models.h
 │   └── Config.h
-|   |
-|   ├── analysis/
-|   |   ├── ChannelAnalysis.cpp
-|   |   ├── ChannelAnalysis.h
-|   |   ├── SecurityAnalysis.cpp
-|   |   └── SecurityAnalysis.h
-|   |
-|   ├── api/
-|   |   ├── ApiRoutes.cpp
-|   |   └── ApiRoutes.h
-|   |
-|   ├── firebase/
-|   |   ├── FirebaseManager.cpp
-|   |   └── FirebaseManager.h
-|   |
-|   ├── portal/
+│   |
+│   ├── analysis/
+│   |   ├── ChannelAnalysis.cpp
+│   |   ├── ChannelAnalysis.h
+│   |   ├── SecurityAnalysis.cpp
+│   |   └── SecurityAnalysis.h
+│   |
+│   ├── api/
+│   |   ├── ApiRoutes.cpp
+│   |   └── ApiRoutes.h
+│   |
+│   ├── firebase/
+│   |   ├── FirebaseManager.cpp
+│   |   └── FirebaseManager.h
+│   |
+│   ├── portal/
 │   |   ├── CaptivePortal.cpp
-|   |   └── CaptivePortal.h
-|   |
-|   ├── scanner/
+│   |   └── CaptivePortal.h
+│   |
+│   ├── scanner/
 │   |   ├── WifiScanner.cpp
 │   |   └── WifiScanner.h
-|   |
-|   ├── time/
+│   |
+│   ├── time/
 │   |   ├── TimeManager.cpp
 │   |   └── TimeManager.h
 │
