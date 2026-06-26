@@ -206,8 +206,8 @@ button:hover {
 
     <div class="header">
 
-      <h1>Portal Auditoria</h1>
-
+      <h1>UPE</h1>
+      <h2>Portal Auditoria</h2>
       <p>Auditoria Wi-Fi Educacional</p>
 
     </div>
@@ -459,7 +459,8 @@ th {
 <body>
 
 <header>
-  <h1>NetScan</h1>
+  <h1>UPE</h1>
+  <h2>NetScan</h2>
   <p>Dashboard de Auditoria Wi-Fi em Tempo Real</p>
 </header>
 

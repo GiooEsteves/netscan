@@ -2,8 +2,8 @@
 #define CONFIG_H
 
 // Rede WIFI real para conectar com o firebase
-#define WIFI_SSID "brisa-1360510"
-#define WIFI_PASSWORD "4z8nt5pr"
+#define WIFI_SSID "UPE-Estudantes(UnL)"
+#define WIFI_PASSWORD "OrgulhodeserUPE"
 
 // Rede WIFi falsa criada pela ESP
 #define PORTAL_SSID "UPE_Auditoria_WiFi"

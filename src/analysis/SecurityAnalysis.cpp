@@ -25,6 +25,18 @@ bool isOpenNetwork(String encryption) {
   );
 }
 
+bool isWeakEncryption(String encryption) {
+  encryption.toLowerCase();
+
+  return (
+    encryption.indexOf("wep") >= 0 ||
+    encryption.indexOf("wpa ") >= 0 ||
+    encryption == "wpa" ||
+    encryption.indexOf("wpa1") >= 0 ||
+    encryption.indexOf("tkip") >= 0
+  );
+}
+
 void generateSecurityAlerts() {
   alertCount = 0;
 
@@ -38,6 +50,18 @@ void generateSecurityAlerts() {
         " | Motivo: rede sem criptografia.",
         "alto"
       );
+
+      if (!isOpenNetwork(networks[i].encryption) && isWeakEncryption(networks[i].encryption)) {
+        addAlert(
+          "Criptografia fraca",
+          "Rede em risco: " + networks[i].ssid +
+          " | BSSID: " + networks[i].bssid +
+          " | Canal: " + String(networks[i].channel) +
+          " | Segurança: " + networks[i].encryption +
+          " | Motivo: rede usando criptografia inferior a WPA2.",
+          "alto"
+        );
+      }
     }
 
     if (networks[i].rssi > -40) {
@@ -138,6 +162,13 @@ WiFiQuality calculateWiFiQuality() {
 
   for (int ch = 1; ch <= 13; ch++) {
     if (channelUsage[ch] >= 5) {
+      score -= 10;
+      break;
+    }
+  }
+
+  for (int i = 0; i < networkCount; i++) {
+    if (isWeakEncryption(networks[i].encryption)) {
       score -= 10;
       break;
     }

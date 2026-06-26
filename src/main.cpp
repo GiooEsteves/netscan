@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <WiFi.h>
+//#include <WiFiManager.h>
 
 #include "Config.h"
 #include "time/TimeManager.h"
@@ -7,6 +8,9 @@
 #include "analysis/ChannelAnalysis.h"
 #include "scanner/WifiScanner.h"
 #include "firebase/FirebaseManager.h"
+
+#define BTN_NEXT   0
+#define BTN_SELECT 16
 
 enum Mode {
   MODE_SCANNER,
@@ -25,6 +29,24 @@ void setup() {
 
   Serial.begin(115200);
   delay(1000);
+
+  /*
+
+  WiFiManager wm;
+
+  bool conectado = wm.autoConnect("NetScan-Setup", "12345678");
+
+  if (!conectado) {
+    Serial.println("Falha ao conectar no Wi-Fi. Reiniciando...");
+    delay(3000);
+    ESP.restart();
+  }
+
+  Serial.println("Wi-Fi conectado!");
+  Serial.print("IP: ");
+  Serial.println(WiFi.localIP());
+
+*/
 
   Serial.println();
   Serial.println("=== ESP32 AUDITORIA WIFI EDUCACIONAL ===");

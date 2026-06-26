@@ -10,6 +10,7 @@ extern int alertCount;
 void generateSecurityAlerts();
 bool hasOpenNetwork();
 bool detectEvilTwin();
+bool isWeakEncryption(String encryption);
 String getEvilTwinJson();
 WiFiQuality calculateWiFiQuality();
 
